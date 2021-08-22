@@ -1,0 +1,2 @@
+class ServiceLineCreateInput {}
+export { ServiceLineCreateInput };
