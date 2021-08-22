@@ -1,0 +1,171 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     String[]
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Provider {
+  acceptingNewPatients             Boolean
+  active                           Boolean
+  biography                        String?
+  chatAvailable                    Boolean?
+  conditions                       Condition[]
+  createdAt                        DateTime                        @default(now())
+  docAsapSchedulingConfiguration   DocAsapSchedulingConfiguration? @relation(fields: [docAsapSchedulingConfigurationId], references: [id])
+  docAsapSchedulingConfigurationId String?
+  email                            String?
+  employed                         Boolean?
+  epicReference                    Int?
+  gender                           EnumProviderGender?
+  id                               String                          @id @default(cuid())
+  insuranceCarriers                InsuranceCarrier[]
+  insurancePlans                   InsurancePlan[]
+  languages                        Language[]
+  locations                        Location[]
+  medicalGroups                    MedicalGroup[]
+  onlineAppointments               Boolean?
+  providerPhotos                   ProviderPhoto
+  providerTypes                    ProviderType[]
+  specialty                        Specialty[]
+  updatedAt                        DateTime                        @updatedAt
+  videoUrl                         String?
+  virtualVisits                    Boolean?
+  website                          String?
+}
+
+model Specialty {
+  conditions    Condition[]
+  createdAt     DateTime     @default(now())
+  id            String       @id @default(cuid())
+  providers     Provider[]
+  serviceLine   ServiceLine? @relation(fields: [serviceLineId], references: [id])
+  serviceLineId String?
+  updatedAt     DateTime     @updatedAt
+}
+
+model Location {
+  addressLine_1  String
+  addressLine_2  String?
+  city           String?
+  createdAt      DateTime      @default(now())
+  friday         DateTime?
+  id             String        @id @default(cuid())
+  locationType   LocationType? @relation(fields: [locationTypeId], references: [id])
+  locationTypeId String?
+  monday         DateTime?
+  provider       Provider[]
+  saturday       DateTime?
+  serviceLine    ServiceLine[]
+  state          String?
+  sunday         DateTime?
+  thursday       DateTime?
+  tuesday        DateTime?
+  updatedAt      DateTime      @updatedAt
+  wednesday      DateTime?
+  zip            String?
+}
+
+model ServiceLine {
+  createdAt   DateTime    @default(now())
+  id          String      @id @default(cuid())
+  locations   Location[]
+  specialties Specialty[]
+  updatedAt   DateTime    @updatedAt
+}
+
+model Condition {
+  name        String     @unique
+  createdAt   DateTime   @default(now())
+  id          String     @id @default(cuid())
+  provider    Provider[]
+  specialty   Specialty  @relation(fields: [specialtyId], references: [id])
+  specialtyId String
+  updatedAt   DateTime   @updatedAt
+}
+
+model Language {
+  createdAt DateTime   @default(now())
+  id        String     @id @default(cuid())
+  name      String     @unique
+  provider  Provider[]
+  updatedAt DateTime   @updatedAt
+}
+
+model MedicalGroup {
+  createdAt DateTime   @default(now())
+  id        String     @id @default(cuid())
+  name      String
+  provider  Provider[]
+  updatedAt DateTime   @updatedAt
+}
+
+model DocAsapSchedulingConfiguration {
+  createdAt DateTime @default(now())
+  docAsapId String   @unique
+  id        String   @id @default(cuid())
+  provider  Provider
+  updatedAt DateTime @updatedAt
+}
+
+model LocationType {
+  createdAt DateTime   @default(now())
+  id        String     @id @default(cuid())
+  locations Location[]
+  name      String     @unique
+  updatedAt DateTime   @updatedAt
+}
+
+model InsuranceCarrier {
+  createdAt      DateTime        @default(now())
+  id             String          @id @default(cuid())
+  code           String          @unique
+  name           String          @unique
+  insurancePlans InsurancePlan[]
+  provider       Provider[]
+  updatedAt      DateTime        @updatedAt
+}
+
+model InsurancePlan {
+  createdAt          DateTime         @default(now())
+  id                 String           @id @default(cuid())
+  insuranceCarrier   InsuranceCarrier @relation(fields: [insuranceCarrierId], references: [id])
+  insuranceCarrierId String
+  code               String?          @unique
+  name               String           @unique
+  provider           Provider[]
+  updatedAt          DateTime         @updatedAt
+}
+
+model ProviderType {
+  createdAt DateTime   @default(now())
+  id        String     @id @default(cuid())
+  provider  Provider[]
+  name      String
+  updatedAt DateTime   @updatedAt
+}
+
+model ProviderPhoto {
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  provider   Provider? @relation(fields: [providerId], references: [id])
+  providerId String?
+  updatedAt  DateTime  @updatedAt
+}
+
+enum EnumProviderGender {
+  M
+}

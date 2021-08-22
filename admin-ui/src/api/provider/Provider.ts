@@ -1,0 +1,38 @@
+import { Condition } from "../condition/Condition";
+import { DocAsapSchedulingConfiguration } from "../docAsapSchedulingConfiguration/DocAsapSchedulingConfiguration";
+import { InsuranceCarrier } from "../insuranceCarrier/InsuranceCarrier";
+import { InsurancePlan } from "../insurancePlan/InsurancePlan";
+import { Language } from "../language/Language";
+import { Location } from "../location/Location";
+import { MedicalGroup } from "../medicalGroup/MedicalGroup";
+import { ProviderPhoto } from "../providerPhoto/ProviderPhoto";
+import { ProviderType } from "../providerType/ProviderType";
+import { Specialty } from "../specialty/Specialty";
+
+export type Provider = {
+  acceptingNewPatients: boolean;
+  active: boolean;
+  biography: string | null;
+  chatAvailable: boolean | null;
+  conditions?: Array<Condition>;
+  createdAt: Date;
+  docAsapSchedulingConfiguration?: DocAsapSchedulingConfiguration | null;
+  email: string | null;
+  employed: boolean | null;
+  epicReference: number | null;
+  gender?: "M" | null;
+  id: string;
+  insuranceCarriers?: Array<InsuranceCarrier>;
+  insurancePlans?: Array<InsurancePlan>;
+  languages?: Array<Language>;
+  locations?: Array<Location>;
+  medicalGroups?: Array<MedicalGroup>;
+  onlineAppointments: boolean | null;
+  providerPhotos?: ProviderPhoto;
+  providerTypes?: Array<ProviderType>;
+  specialty?: Array<Specialty>;
+  updatedAt: Date;
+  videoUrl: string | null;
+  virtualVisits: boolean | null;
+  website: string | null;
+};
